@@ -8,7 +8,7 @@ import logging
 import qbittorrentapi as qba
 import asyncio
 
-from aiohttp import worker
+from aiohttp import web
 import nodes
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -726,15 +726,15 @@ async def e404_middleware(app, handler):
 
 async def start_server():
 
-    app = worker.Application(middlewares=[e404_middleware])
+    app = web.Application(middlewares=[e404_middleware])
     app.add_routes(routes)
     return app
 
 
 async def start_server_async(port=80):
 
-    app = worker.Application(middlewares=[e404_middleware])
+    app = web.Application(middlewares=[e404_middleware])
     app.add_routes(routes)
-    runner = worker.AppRunner(app)
+    runner = web.AppRunner(app)
     await runner.setup()
-    await worker.TCPSite(runner, "0.0.0.0", port).start()
+    await web.TCPSite(runner, "0.0.0.0", port).start()
